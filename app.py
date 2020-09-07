@@ -31,5 +31,8 @@ for (lat, lon, name, elevation) in zip(
         )
     )
 
+#Add polygon Layer
+fg.add_child(folium.GeoJson(data=open("world.json", "r", encoding="utf-8-sig").read()))
+
 map.add_child(fg)
 map.save("Map1.html")
