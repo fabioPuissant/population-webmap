@@ -7,7 +7,7 @@ def color_producer(elv):
 
 
 volcanoes_data = pandas.read_csv("volcanoes.csv")
-map = folium.Map(location=[38.58, -99.09], zoom_start=6, tiles="Stamen Terrain")
+display_map = folium.Map(location=[38.58, -99.09], zoom_start=6, tiles="Stamen Terrain")
 html = "<h4>Volcano information:</h4>" \
        "<b>Location</b>: <i>%s</i><br/>" \
        "<b>Height</b>: <i>%s<i/> <b>m</b>"
@@ -31,8 +31,17 @@ for (lat, lon, name, elevation) in zip(
         )
     )
 
-#Add polygon Layer
-fg.add_child(folium.GeoJson(data=open("world.json", "r", encoding="utf-8-sig").read()))
+# Add polygon Layer
+fg.add_child(
+    folium.GeoJson(
+        data=open("world.json", "r", encoding="utf-8-sig").read(),
+        style_function=lambda x: {'fillColor':
+                                      'green' if x['properties']['POP2005'] < 10000000
+                                      else
+                                      'orange' if x['properties']['POP2005'] < 20000000
+                                      else 'red'}
+    )
+)
 
-map.add_child(fg)
-map.save("Map1.html")
+display_map.add_child(fg)
+display_map.save("Map1.html")
